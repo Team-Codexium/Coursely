@@ -1,5 +1,6 @@
 import { SidebarProvider } from "./components/ui/sidebar";
 import AppSidebar from "./container/AppSidebar";
+import Dashboard from "./container/Dashboard";
 
 
 const App = () => {
@@ -7,7 +8,7 @@ const App = () => {
     <div>
       <SidebarProvider>
         <AppSidebar />
-
+        <Dashboard />
       </SidebarProvider>
     </div>
   )
