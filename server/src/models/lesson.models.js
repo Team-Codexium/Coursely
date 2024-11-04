@@ -17,4 +17,4 @@ const LessonSchema = new Schema({
   postion: Number,
 });
 
-export const Lesson = mongoose.model('Lesson', LessonSchema);
+export default Lesson = mongoose.model('Lesson', LessonSchema);

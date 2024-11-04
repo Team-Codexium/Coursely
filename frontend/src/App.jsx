@@ -1,16 +1,20 @@
-import { SidebarProvider } from "./components/ui/sidebar";
-import AppSidebar from "./container/AppSidebar";
-import Dashboard from "./container/Dashboard";
+import { Login, Navbar, Register } from "./components/comps";
+import { Dashboard, Home, Profile } from "./container";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 
 const App = () => {
   return (
-    <div>
-      <SidebarProvider>
-        <AppSidebar />
-        <Dashboard />
-      </SidebarProvider>
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+    </Router>
   )
 }
 

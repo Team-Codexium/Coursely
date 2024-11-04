@@ -1,4 +1,6 @@
 import mongoose, { Schema } from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const UserSchema = new Schema(
   {
@@ -23,7 +25,7 @@ const UserSchema = new Schema(
     role: {
       type: String,
       enum: ["student", "instructor"],
-      required: true,
+      default: "student",
     },
     profilePicture: {
       type: String, // Cloud url for pfp
@@ -32,10 +34,34 @@ const UserSchema = new Schema(
     bio: {
       type: String,
       trim: true,
+      default: "",
     },
     googleId: String,
   },
   { timestamps: true }
 );
 
-export const User = mongoose.model("User", UserSchema);
+UserSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+UserSchema.methods.isValidPassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+UserSchema.methods.generateAccessToken = function(){
+  return jwt.sign(
+    {
+      _id: this._id,
+      role: this.role,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: 3*24*60*60,
+    }
+  );
+};
+
+const User = mongoose.model("User", UserSchema);
+
+export default User;

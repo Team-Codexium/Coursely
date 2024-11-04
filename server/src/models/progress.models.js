@@ -18,4 +18,4 @@ const ProgressSchema = new Schema({
   }
 }, { timestamps: true});
 
-export const Progress = mongoose.model("Progress", ProgressSchema);
+export default Progress = mongoose.model("Progress", ProgressSchema);
