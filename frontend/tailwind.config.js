@@ -9,6 +9,16 @@ module.exports = {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
+		backgroundImage: {
+			hero: "url('./src/assets/hero.jpg')",
+		},
+		fontFamily:
+		{
+			jma :" Just Me Again Down Here",
+			season: "'season'",
+			poppins: "poppins"
+
+		},
   		colors: {
 				darkBrown: "#3B3030",
 				lightBrown: "#E9EED9",
