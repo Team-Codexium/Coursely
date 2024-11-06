@@ -13,7 +13,6 @@ const Dashboard = () => {
  
   return (
     <div>
-      <Navbar />
       <Button varient="outline" onCLick={handleSubmit}>Submit</Button>
     </div>
   )
