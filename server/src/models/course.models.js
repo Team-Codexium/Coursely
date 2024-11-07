@@ -17,12 +17,6 @@ const CourseSchema = new Schema(
     },
     price: Number,
     language: String,
-    students: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
     lessons: [{ type: Schema.Types.ObjectId, ref: "Lesson" }],
     revies: [{ type: Schema.Types.ObjectId, ref: "Review" }],
     assignments: [
@@ -35,4 +29,6 @@ const CourseSchema = new Schema(
   { timestamps: true }
 );
 
-export default Course = mongoose.model("Course", CourseModel);
+const Course = mongoose.model("Course", CourseSchema);
+
+export default Course;

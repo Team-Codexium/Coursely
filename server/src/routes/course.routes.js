@@ -5,7 +5,7 @@ import { courses } from "../controllers/courses.controller.js";
 
 const router = Router();
 
-router.route('/course').get(courses);
+router.route('/').get(courses);
 
 
 export default router;

@@ -2,8 +2,11 @@ import { Navbar } from '@/components/comps'
 import { Button } from '@/components/ui/button'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types';
+import { LogOut } from 'lucide-react'
 
-const Dashboard = () => {
+const Dashboard = ({logout}) => {
   const [data, setData] = useState([]);
   
   const handleSubmit = async () => {
@@ -13,9 +16,18 @@ const Dashboard = () => {
  
   return (
     <div>
-      <Button varient="outline" onCLick={handleSubmit}>Submit</Button>
+      <Link to="/profile">
+      <Button varient="outline">Profile</Button> 
+      </Link>
+
+      <Button onCLick={logout}>Logout</Button>
+
     </div>
   )
 }
 
 export default Dashboard
+
+Dashboard.propTypes = {
+  logout: PropTypes.func,
+}

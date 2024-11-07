@@ -12,6 +12,10 @@ const EnrollmentSchema = new Schema({
     ref: "Course",
     required: true
   },
+  completed: {
+    type: Boolean,
+    default: false // Marks completion status
+  }
 }, { timestamps: true});
 
 export default Enrollment = mongoose.model("Enrollment", EnrollmentSchema);

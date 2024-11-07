@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+
 const UserSchema = new Schema(
   {
     name: {
@@ -15,6 +16,10 @@ const UserSchema = new Schema(
       unique: true,
       lowercase: true,
       trim: true,
+      match: [
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        "Please enter a valid email address",
+      ],
     },
     password: {
       type: String,
@@ -27,16 +32,19 @@ const UserSchema = new Schema(
       enum: ["student", "instructor"],
       default: "student",
     },
-    profilePicture: {
-      type: String, // Cloud url for pfp
-      default: "default.jpg",
-    },
+    profilePicture: String, //Url to cloud provider
+    interests: String,
+    experties: String,
     bio: {
       type: String,
       trim: true,
       default: "",
     },
     googleId: String,
+    enrollrdCourses: [
+      { type: Schema.Types.ObjectId, ref: "Enrollment", default: [] },
+    ],
+    courseCreated: [{ type: Schema.Types.ObjectId, ref: "Course", default:[]}] // Only for instructors
   },
   { timestamps: true }
 );
@@ -49,17 +57,20 @@ UserSchema.methods.isValidPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-UserSchema.methods.generateAccessToken = function(){
-  return jwt.sign(
-    {
-      _id: this._id,
-      role: this.role,
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: 3*24*60*60,
-    }
-  );
+UserSchema.methods.generateAccessToken = function () {
+  try {
+    return jwt.sign(
+      {
+        _id: this._id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: 3 * 24 * 60 * 60,
+      }
+    );
+  } catch (e) {
+    console.log("error generating access token", e);
+  }
 };
 
 const User = mongoose.model("User", UserSchema);

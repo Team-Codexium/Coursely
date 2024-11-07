@@ -15,6 +15,7 @@ const LessonSchema = new Schema({
   content: String,
   duration: Number,
   postion: Number,
+  
 });
 
 export default Lesson = mongoose.model('Lesson', LessonSchema);

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Controller, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { z } from "zod"
 import axios from "axios"
 
@@ -32,10 +32,10 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Link, useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react"
+import {  useState } from "react"
 import { hr } from "@/assets"
-import { Textarea } from "../ui/textarea"
 import { Circle, Trash } from "lucide-react"
+import PropTypes from "prop-types"
 
 const registerSchema = z.object({
   role: z.string().min(1, { message: "Role selection is required." }),
@@ -47,16 +47,15 @@ const registerSchema = z.object({
     .regex(/[a-zA-Z0-9]/, { message: 'Password must be alphanumeric' }),
   interests: z.string().optional(),
   experties: z.string().optional(),
-  profilePicture: z
-    .any()
-    .refine((file) => file instanceof File, "Profile picture is required"),
+  bio: z.string().optional(),
+
 
 })
 
 
-const Register = () => {
+const Register = ({ setCookie, setIsAuthenticated }) => {
   const navigate = useNavigate();
-  const [preview, setPreview] = useState(null)
+  // const [preview, setPreview] = useState(null)
   const [role, setRole] = useState("");
   const [step, setStep] = useState(1);
 
@@ -65,8 +64,11 @@ const Register = () => {
     setStep((prevStep) => prevStep + 1)
   }
   const handlePrev = () => {
-    setRole("");
-    setStep((prevStep) => prevStep - 1);
+    // setRole("");
+    setStep(step - 1);
+    if (step === 1) {
+      setRole("");
+    }
   }
 
 
@@ -82,47 +84,66 @@ const Register = () => {
       interests: "",
       experties: "",
       bio: "",
-      profilePicture: null,
+      // pfp: {},
     },
   });
 
+  // const handleImageUpload = async (file) => {
+  //   const formData = new FormData();
+  // formData.append("file", file);
+  // formData.append("upload_preset", "YOUR_UPLOAD_PRESET");  // Configure this in Cloudinary
+
+  // const response = await fetch("https://console.cloudinary.com/console/c-3e2d84c40c59c6e5925d41e7dc31fa/media_library/folders/c981d64fe08926106998f9b9e03dca3f99", {
+  //   method: "POST",
+  //   body: formData,
+  // });
+  // const data = await response.json();
+  // return data.secure_url;
+  // }
 
   // 2. Define a submit handler.
   const onSubmit = async (values) => {
     try {
-      const formData = new FormData()
-      formData.append('role', values.role)
-      formData.append('name', values.name)
-      formData.append('email', values.email)
-      formData.append('password', values.password)
-      if (values.experties) formData.append('experties', values.experties)
-      if (values.interests) formData.append('interests', values.interests)
-      if (values.profilePicture) {
-        formData.append('profilePicture', values.profilePicture)
-      }
 
-      const response = await axios.post("http://localhost:3000/users/register", formData, { withCredentials: true, headers: { "Content-Type": "application/json"} });
-      console.log("response", response);
+      const formData = new FormData();
+      formData.append("role", values.role);
+      formData.append("name", values.name);
+      formData.append("email", values.email);
+      formData.append("password", values.password);
+      formData.append("interests", values.interests || "");
+      formData.append("experties", values.experties || "");
+      formData.append("bio", values.bio || "");
+      
+      //Sending formData to backend
+      const response = await axios.post("http://localhost:3000/users/register", values, { withCredentials: true });
+
+      const token = response.data.token;
+      if (token) {
+        sessionStorage.setItem("token", token);
+        setCookie("token", token);
+      }
       if (response.data.success) {
+        setIsAuthenticated(true)
         navigate("/dashboard");
       }
     } catch (err) {
-      console.error("Error registering user:", err);
+
+      console.log("Error registering user:", err.message);
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      setPreview(URL.createObjectURL(file))
-      form.setValue("profilePicture", file)
-    }
-  }
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0]
+  //   if (file) {
+  //     setPreview(URL.createObjectURL(file))
+  //     form.setValue("pfp", file)
+  //   }
+  // }
 
-  const handleRemoveImage = () => {
-    setPreview(null)
-    form.resetField("profilePicture")
-  }
+  // const handleRemoveImage = () => {
+  //   setPreview(null)
+  //   form.resetField("pfp")
+  // }
 
   return (
     <div className="flex justify-evenly items-center">
@@ -143,7 +164,7 @@ const Register = () => {
                     <FormField
                       control={form.control}
                       name="role"
-                      render={({ field }) => (
+                      render={() => (
                         <Select onValueChange={(value) => { form.setValue("role", value); setRole(value); }}>
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Register as:" />
@@ -248,72 +269,70 @@ const Register = () => {
                         <FormItem>
                           <FormLabel>Bio</FormLabel>
                           <FormControl>
-                            <Textarea
-                              id="bio"
-                              placeholder="Tell us a little bit about yourself"
-                              className="resize-none"
-                              {...field}
-                            />
+                            <Input id="bio" placeholder="Tell us a little bit about yourself" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    <FormItem>
-                      <FormLabel>Profile Picture</FormLabel>
-                      <Controller
-                        name="profilePicture"
-                        control={form.control}
-                        render={({ field }) => (
-                          <>
-                            <Card>
-                              <CardContent className="p-6">
-                                {preview ? (
-                                  <div className="relative">
-                                    <img src={preview} alt="Profile Preview" className="w-full h-32 object-cover rounded-lg" />
-                                    <button
-                                      type="button"
-                                      onClick={handleRemoveImage}
-                                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-sm"
-                                    >
-                                      <Trash className="m-2" />
-                                    </button>
-                                  </div>
-                                ) : (
-                                  <div
-                                    className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center"
-                                    onDragOver={(e) => e.preventDefault()}
-                                    onDrop={(e) => {
-                                      e.preventDefault()
-                                      const file = e.dataTransfer.files[0]
-                                      if (file) {
-                                        setPreview(URL.createObjectURL(file))
-                                        form.setValue("profilePicture", file)
-                                      }
-                                    }}
+                    {/* Some error occured during implementaion */}
+                    {/*<FormField
+                      control={form.control}
+                      name="pfp"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Profile Picture</FormLabel>
+                          <Card>
+                            <CardContent className="p-6">
+                              {preview ? (
+                                <div className="relative">
+                                  <img src={preview} alt="Profile Preview" className="w-full h-44 object-cover rounded-lg" />
+                                  <button
+                                    type="button"
+                                    onClick={handleRemoveImage}
+                                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-sm"
                                   >
-                                    <Input
-                                      type="file"
-                                      onChange={handleFileChange}
-                                      accept="image/*"
-                                      className="hidden"
-                                      ref={(input) => (input ? field.ref(input) : null)}
-                                    />
-                                    <p>Drag and drop an image or click to upload</p>
-                                  </div>
-                                )}
-                              </CardContent>
-                            </Card>
-                          </>
-                        )}
-                      />
-                      <FormMessage />
-                    </FormItem>
+                                    <Trash className="m-2" />
+                                    
+                                  </button>
+                                </div>
+                              ) : (
+                                <div
+                                  className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center"
+                                  onDragOver={(e) => e.preventDefault()}
+                                  onDrop={(e) => {
+                                    e.preventDefault()
+                                    const file = e.dataTransfer.files[0]
+                                    if (file) {
+                                      setPreview(URL.createObjectURL(file))
+                                      form.setValue("pfp", file)
+                                    }
+                                  }}
+                                >
+                                  <Input
+                                    type="file"
+                                    onChange={(e) => {
+                                      handleFileChange(e)
+                                      field.onChange(e.target.files[0])
+                                    }}
+                                    accept="image/*"
+                                    className="hidden"
+                                    ref={(input) => (input ? field.ref(input) : null)}
+                                  />
+                                  <p>Drag and drop an image or click to upload</p>
+                                </div>
+                              )}
+                            </CardContent>
+                          </Card>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />*/}
 
                   </>}
 
                   {step === 1 && (
-                    <Button onClick={handleNext} className="mt-4 w-full" disabled={!role}>
+                    <Button onClick={handleNext} className="mt-4 w-full" disabled={role.length === 0}>
                       Save and Next
                     </Button>
                   )}
@@ -335,3 +354,9 @@ const Register = () => {
 };
 
 export default Register;
+
+
+Register.propTypes = {
+  setCookie: PropTypes.func,
+  setIsAuthenticated: PropTypes.func
+}

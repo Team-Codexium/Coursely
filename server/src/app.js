@@ -2,9 +2,12 @@ import express, { urlencoded } from 'express';
 import cors from 'cors';
 import {} from "dotenv/config"
 import cookieParser from "cookie-parser"
+import bodyParser from 'body-parser';
 
 const app = express();
 
+app.use(express.static('public'))
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
@@ -21,7 +24,7 @@ import coursesRoutes from "./routes/course.routes.js"
 
 //Use routers
 app.use("/users", userRoutes);
-app.use("/course", coursesRoutes);
+app.use("/courses", coursesRoutes);
 // app.get("/some", jwtAuthentication, (req, res) => {
 //   res.send("Hello, World!");
 // })
