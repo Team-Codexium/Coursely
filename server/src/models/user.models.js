@@ -32,7 +32,10 @@ const UserSchema = new Schema(
       enum: ["student", "instructor"],
       default: "student",
     },
-    profilePicture: String, //Url to cloud provider
+    pfp: {
+      type: String,
+      default: "", //Url to cloud provider
+    }, 
     interests: String,
     experties: String,
     bio: {

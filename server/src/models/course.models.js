@@ -18,7 +18,7 @@ const CourseSchema = new Schema(
     price: Number,
     language: String,
     lessons: [{ type: Schema.Types.ObjectId, ref: "Lesson" }],
-    revies: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+    reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
     assignments: [
       {
         type: Schema.Types.ObjectId,

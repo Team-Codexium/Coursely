@@ -1,4 +1,4 @@
-import { Login, Navbar, Register } from "./components/comps";
+import { CreateCourse, EditProfile, Login, MyCourses, Navbar, Register } from "./components/comps";
 import { Dashboard, Home, Profile } from "./container";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -68,7 +68,7 @@ const App = () => {
   return (
     <div>
       <Toaster />
-      <Navbar logout={logout} isAuthenticated={isAuthenticated} />
+      <Navbar logout={logout} user={user} isAuthenticated={isAuthenticated} />
       <Routes>
         {!isAuthenticated ? (
           <>
@@ -80,6 +80,9 @@ const App = () => {
           <>
             <Route path={`${isAuthenticated ? "/" : "/dashboard"}`} element={<Dashboard logout={logout} />} />
             <Route path="/profile" element={<Profile user={user} />} />
+            <Route path={`${user.role === "student" ? "/my-learnings" : "/my-courses"}`} element={<MyCourses user={user} />} />
+            <Route path="/my-courses/create" element={<CreateCourse user={user} />} />
+            <Route path="/profile/edit-profile" element={<EditProfile user={user} setUser={setUser}/>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         )}

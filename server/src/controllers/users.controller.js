@@ -1,7 +1,8 @@
 import passport from "passport";
 import User from "../models/user.models.js";
-import { fileUpload } from "../config/cloudenry.js";
+import { uploadOnCloudinary } from "../config/cloudenry.js";
 import bcrypt from "bcrypt";
+import multer from "multer";
 
 const googleAuth = (req, res, next) => {
   passport.authenticate("google", { session: false }, (error, data) => {
@@ -14,7 +15,7 @@ const googleAuth = (req, res, next) => {
     //httpOnly ensures that the cookie is not accessible through client-side scripts
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
     });
     res.redirect(`/${token}`);
   })(req, res, next);
@@ -72,7 +73,7 @@ const login = async (req, res, next) => {
 
   try {
     // checks if the user is already exists
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email }).select("+password");
 
     // if doesnt
     if (!user) {
@@ -89,19 +90,21 @@ const login = async (req, res, next) => {
     }
 
     //Generating JWT token
-    const token = await user.generateAccessToken(user._id); 
+    const token = await user.generateAccessToken(user._id);
 
-    
     //Setting the token in the response cookie sending response
-    return res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "None",
-      secure: true, 
-    }).status(200).json({
-      success: true,
-      message: "User logged in successfully",
-      token, 
-    });
+    return res
+      .cookie("token", token, {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+      })
+      .status(200)
+      .json({
+        success: true,
+        message: "User logged in successfully",
+        token,
+      });
   } catch (err) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
@@ -124,4 +127,42 @@ const getUser = async (req, res, next) => {
   }
 };
 
-export { googleAuth, register, login, getUser };
+const updatePfp = async (req, res) => {
+  try {
+    const pfpPath = req.file?.path;
+
+    if (!pfpPath) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No profile picture provided" });
+    }
+
+    const pfp = await uploadOnCloudinary(pfpPath);
+    if (!pfp.url) {
+      return res
+        .status(500)
+        .json({
+          success: false,
+          message: "Error uploading profile picture to Cloudinary",
+        });
+    }
+    const user = await User.findByIdAndUpdate(
+      req.body.id,
+      {
+        pfp: pfp.url,
+      },
+      { new: true }
+    ).select("-password");
+
+    console.log(user);
+    return res.status(200).json({
+      suucess: true,
+      message: "PFP Updated",
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export { googleAuth, register, login, getUser, updatePfp };

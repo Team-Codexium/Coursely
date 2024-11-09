@@ -14,13 +14,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-const Navbar = ({ logout, isAuthenticated }) => {
-
+const Navbar = ({ logout, isAuthenticated, user }) => {
+  // console.log(user);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  const avatar = (name) => {
+    return name.slice(0,1).toUpperCase();
+  }
+  // console.log(avatar("abhuishej"));
 
   return (
     <div className='flex h-20 justify-between'>
@@ -70,10 +75,17 @@ const Navbar = ({ logout, isAuthenticated }) => {
 
           </div>
         </div>
-        <div className='hidden lg:flex justify-center flex-1 items-center space-x-2'>
+        <div className='hidden lg:flex justify-center flex-1 items-center space-x-4'>
+          
+          {isAuthenticated && user.role === "student" ? <>
+            <Link to="my-learnings" className="text-lg hover:text-darkBrown font-semibold">My Learning</Link>
+          </> : <>
+            <Link to="/my-courses">My Courses</Link>
+          </>}
+
           {isAuthenticated ? <>
-            <Link to="/profile"><Button className="h-12 bg-darkBrown">Profile</Button></Link>
-            <Button className="h-12" onClick={logout}>Logout</Button>
+            <Link to={`/profile`} className="h-12 w-12 text-2xl rounded-full p-1 bg-darkBrown uppercase text-lightBrown flex justify-center items-center">{avatar(user.name)}</Link>
+            <Button variant="outline" className="h-12 w-12 border-2 border-darkBrown  flex items-center justify-center rounded-full " onClick={logout}><LogOut className="w-full w-full" /></Button>
           </> : <>
             <Link to="/register"><Button variant="outline" className="h-12 ">Register</Button></Link>
             <Link to="/login"><Button className="h-12 bg-darkBrown" type="button">Login</Button></Link></>}
@@ -88,4 +100,5 @@ export default Navbar
 Navbar.propTypes = {
   logout: PropTypes.func,
   isAuthenticated: PropTypes.bool,
+  user: PropTypes.object
 };
