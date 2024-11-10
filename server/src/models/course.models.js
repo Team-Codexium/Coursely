@@ -15,9 +15,24 @@ const CourseSchema = new Schema(
       ref: "User",
       required: true,
     },
-    price: Number,
+    price:{
+      type: String,
+      default: "0"
+    },
     language: String,
-    lessons: [{ type: Schema.Types.ObjectId, ref: "Lesson" }],
+    lessons: [{ 
+      title: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      content: {
+        type: String,
+        required: true,
+      },
+      duration: String,
+      postion: Number,
+     }],
     reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
     assignments: [
       {

@@ -4,8 +4,7 @@ import { Button } from '../ui/button';
 
 const MyCourses = ({ user }) => {
   const student = user.role === 'student';
-  const courses = student ? user.enrolledCourses: user.courseCreated
-  console.log(student, user)
+  // const courses = student ? user.enrolledCourses: user.courseCreated
   return (
     <div>
       <div>

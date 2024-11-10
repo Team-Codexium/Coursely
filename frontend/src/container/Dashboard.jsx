@@ -10,7 +10,7 @@ import {hero} from '../assets'
 
 const Dashboard = ({ logout, user }) => {
   // const [data, setData] = useState([]);
-  console.log(user);
+  // console.log(user);
   // const handleSubmit = async () => {
   //   const response = await axios.get('http://localhost:3000/auth/google');
   //   setData(response.data);

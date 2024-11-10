@@ -92,7 +92,7 @@ const Navbar = ({ logout, isAuthenticated, user }) => {
             <Link to={`/profile`} className="h-12 w-12 bg-cover text-2xl rounded-full p-1 uppercase text-lightBrown flex justify-center items-center">
               <Avatar>
                 <AvatarImage className="bg-cover rounded-full" src={user.pfp} />
-                <AvatarFallback>{user.name.slice(0, 1).toUpperCase()}</AvatarFallback>
+                <AvatarFallback className="bg-darkBrown rounded-full py-[0.6rem] px-[1.2rem]">{user.name.slice(0, 1).toUpperCase()}</AvatarFallback>
               </Avatar>
             </Link>
             <TooltipProvider>
