@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { AlignJustify, CircleUser, LogOut, Search, ShoppingCart, User } from 'lucide-react'
+import { AlignJustify, BookOpenText, CircleUser, LogOut, Search, ShoppingCart, User } from 'lucide-react'
 import PropTypes from "prop-types"
 import { useState } from "react"
 import { Link } from 'react-router-dom'
@@ -24,10 +24,6 @@ const Navbar = ({ logout, isAuthenticated, user }) => {
     setIsOpen(!isOpen);
   };
 
-  const avatar = (name) => {
-    return name.slice(0, 1).toUpperCase();
-  }
-  // console.log(avatar("abhuishej"));
 
   return (
     <div className='flex h-20 justify-between'>
@@ -49,13 +45,20 @@ const Navbar = ({ logout, isAuthenticated, user }) => {
             <DropdownMenu>
               <DropdownMenuTrigger><AlignJustify className="h-12 w-12 cursor-pointer" onClick={toggleMenu} /></DropdownMenuTrigger>
               <DropdownMenuContent className="w-80 mr-4">
-                <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
                 {isAuthenticated ? <>
+                  <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem>
                     <Link to="/profile" className="w-full flex items-center justify-between px-2">
                       <span>Account</span> <span><User /> </span>
                     </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    {isAuthenticated && (user.role === "student" ? <>
+                      <Link to="my-learnings" className="w-full flex items-center justify-between px-2"><span>My Learning</span> <span><BookOpenText /></span></Link>
+                    </> : <>
+                      <Link to="/my-courses" className="w-full flex items-center justify-between px-2"><span>My Courses</span> <span><BookOpenText /></span></Link>
+                    </>)}
                   </DropdownMenuItem>
                   <DropdownMenuItem className="w-full flex items-center justify-between px-4" onClick={logout}>
                     <span>Logout</span> <span><LogOut /> </span>
@@ -79,23 +82,23 @@ const Navbar = ({ logout, isAuthenticated, user }) => {
         </div>
         <div className='hidden lg:flex justify-center flex-1 items-center space-x-4'>
 
-          {isAuthenticated && user.role === "student" ? <>
+          {isAuthenticated && (user.role === "student" ? <>
             <Link to="my-learnings" className="text-lg hover:text-darkBrown font-semibold">My Learning</Link>
           </> : <>
-            <Link to="/my-courses">My Courses</Link>
-          </>}
+            <Link to="/my-courses" className="text-lg hover:text-darkBrown font-semibold">My Courses</Link>
+          </>)}
 
           {isAuthenticated ? <>
             <Link to={`/profile`} className="h-12 w-12 bg-cover text-2xl rounded-full p-1 uppercase text-lightBrown flex justify-center items-center">
               <Avatar>
                 <AvatarImage className="bg-cover rounded-full" src={user.pfp} />
-                <AvatarFallback>{avatar(user.name)}</AvatarFallback>
+                <AvatarFallback>{user.name.slice(0, 1).toUpperCase()}</AvatarFallback>
               </Avatar>
             </Link>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="outline" className="h-12 w-12 border-2 border-darkBrown  flex items-center justify-center rounded-full " onClick={logout}><LogOut className="w-full w-full" /></Button>
+                  <Button variant="outline" className="h-12 w-12 border-2 border-darkBrown  flex items-center justify-center rounded-full " onClick={logout}><LogOut className="w-full" /></Button>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Logout</p>

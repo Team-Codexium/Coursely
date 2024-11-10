@@ -48,6 +48,12 @@ const Login = ({ setCookie }) => {
     },
   })
 
+
+  const handleGoogle = () => {
+    // window.open("http://localhost:3000/users/auth/google", "_self");
+  }
+
+
   async function onSubmit(values) {
     
     try {
@@ -131,7 +137,7 @@ const Login = ({ setCookie }) => {
                   />
                   <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? <> <Circle /> Loging in </> : "Log in"}
                   </Button>
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" onClick={handleGoogle} className="w-full">
                     Login with Google
                   </Button>
                 </div>
