@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import axios from "axios"
 
-
 import {
   Select,
   SelectContent,
@@ -131,6 +130,7 @@ const Register = ({ setCookie, setIsAuthenticated }) => {
       console.log("Error registering user:", err.message);
     }
   };
+
 
   // const handleFileChange = (e) => {
   //   const file = e.target.files[0]
@@ -339,6 +339,7 @@ const Register = ({ setCookie, setIsAuthenticated }) => {
                   {step > 1 && <Button onClick={handlePrev} className="mt-4 w-full">Previous</Button>}
                   {step === 2 && <Button onClick={handleNext} className=" w-full">Next</Button>}
                   {step === 3 && <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting && <Circle />}Register</Button>}
+                
                 </div>
               </form>
             </Form>

@@ -13,6 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip"
 
 const Navbar = ({ logout, isAuthenticated, user }) => {
   // console.log(user);
@@ -23,7 +25,7 @@ const Navbar = ({ logout, isAuthenticated, user }) => {
   };
 
   const avatar = (name) => {
-    return name.slice(0,1).toUpperCase();
+    return name.slice(0, 1).toUpperCase();
   }
   // console.log(avatar("abhuishej"));
 
@@ -47,7 +49,7 @@ const Navbar = ({ logout, isAuthenticated, user }) => {
             <DropdownMenu>
               <DropdownMenuTrigger><AlignJustify className="h-12 w-12 cursor-pointer" onClick={toggleMenu} /></DropdownMenuTrigger>
               <DropdownMenuContent className="w-80 mr-4">
-                <DropdownMenuLabel>Name</DropdownMenuLabel>
+                <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {isAuthenticated ? <>
                   <DropdownMenuItem>
@@ -65,7 +67,7 @@ const Navbar = ({ logout, isAuthenticated, user }) => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="w-full flex items-center justify-between px-2" >
-                  <Link to="/login" className="w-full flex items-center justify-between px-2">
+                    <Link to="/login" className="w-full flex items-center justify-between px-2">
                       <span>Login</span>
                     </Link>
                   </DropdownMenuItem>
@@ -76,7 +78,7 @@ const Navbar = ({ logout, isAuthenticated, user }) => {
           </div>
         </div>
         <div className='hidden lg:flex justify-center flex-1 items-center space-x-4'>
-          
+
           {isAuthenticated && user.role === "student" ? <>
             <Link to="my-learnings" className="text-lg hover:text-darkBrown font-semibold">My Learning</Link>
           </> : <>
@@ -84,8 +86,22 @@ const Navbar = ({ logout, isAuthenticated, user }) => {
           </>}
 
           {isAuthenticated ? <>
-            <Link to={`/profile`} className="h-12 w-12 text-2xl rounded-full p-1 bg-darkBrown uppercase text-lightBrown flex justify-center items-center">{avatar(user.name)}</Link>
-            <Button variant="outline" className="h-12 w-12 border-2 border-darkBrown  flex items-center justify-center rounded-full " onClick={logout}><LogOut className="w-full w-full" /></Button>
+            <Link to={`/profile`} className="h-12 w-12 bg-cover text-2xl rounded-full p-1 uppercase text-lightBrown flex justify-center items-center">
+              <Avatar>
+                <AvatarImage className="bg-cover rounded-full" src={user.pfp} />
+                <AvatarFallback>{avatar(user.name)}</AvatarFallback>
+              </Avatar>
+            </Link>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" className="h-12 w-12 border-2 border-darkBrown  flex items-center justify-center rounded-full " onClick={logout}><LogOut className="w-full w-full" /></Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Logout</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </> : <>
             <Link to="/register"><Button variant="outline" className="h-12 ">Register</Button></Link>
             <Link to="/login"><Button className="h-12 bg-darkBrown" type="button">Login</Button></Link></>}
