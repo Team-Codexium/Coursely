@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { hero } from "../assets";
 
-const Dashboard = ({ logout, user }) => {
+const Dashboard = () => {
   const [courses, setCourses] = useState([]);
   const getCourses = async () => {
     const response = await axios.get("http://localhost:3000/courses", {

@@ -79,7 +79,7 @@ const CreateCourse = ({user}) => {
   };
 
   return (
-    <Card className="mx-auto max-w-3xl p-6 m-6">
+    <Card className="mx-auto max-w-3xl p-6 m-6 w-full max-w-[80rem]">
       <CardHeader>
         <CardTitle className="text-2xl">Create Course</CardTitle>
       </CardHeader>

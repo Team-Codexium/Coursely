@@ -20,10 +20,10 @@ const createCourse = async (req, res) => {
       instructor,
     });
     const user = await User.findByIdAndUpdate(userId,{ $push: { courseCreated: newCourse._id}}, {new: true})
-    return res.status(201).json({status: true, message: "Course created successfully", course: newCourse});
+    return res.status(201).json({success: true, message: "Course created successfully", course: newCourse});
 
   } catch (error) { 
-    return res.status(500).json({status: false, message: "Error during creating course", error: error})
+    return res.status(500).json({success: false, message: "Error during creating course", error: error})
   }
 }
 
@@ -38,9 +38,9 @@ const courses = async (req,res) => {
       let instructor = await User.findById(course.instructor);
       course.instructor = instructor;
     })
-    return res.status(200).json({status: true, message: "Courses fetched successfully", courses: courses});
+    return res.status(200).json({success: true, message: "Courses fetched successfully", courses: courses});
   } catch (error) {
-    res.status(500).json({status: false, message: "Error fetching courses", error: error})
+    res.status(500).json({success: false, message: "Error fetching courses", error: error})
   }
 }
 
