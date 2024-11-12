@@ -23,18 +23,11 @@ const googleAuth = (req, res, next) => {
 
 const register = async (req, res, next) => {
   const { name, email, password, role, experties, interests, bio } = req.body;
-  // console.log(req.body);
-  // console.log(req.file);
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-
-    // let pfpUrl = 'pfp.jpg';
-    // if (profilePicture) {
-    //   pfpUrl = await fileUpload(profle);
-    // }
 
     const user = await User.create({
       role,
@@ -44,7 +37,6 @@ const register = async (req, res, next) => {
       experties,
       interests,
       bio,
-      // profilePicture: pfpUrl,
     });
 
     //Generating token

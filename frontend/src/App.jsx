@@ -11,7 +11,6 @@ const App = () => {
   const [user, setUser] = useState({});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
-
   const getUser = async (token) => {
     try {
       // Calling backend to get user information
@@ -64,7 +63,7 @@ const App = () => {
     navigate('/');  
   };
 
-
+// console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID)
   return (
     <div>
       <Toaster />
@@ -78,7 +77,7 @@ const App = () => {
           </>
         ) : (
           <>
-            <Route path={`${isAuthenticated ? "/" : "/dashboard"}`} element={<Dashboard logout={logout} />} />
+            <Route path={`${isAuthenticated ? "/" : "/dashboard"}`} element={<Dashboard user={user} logout={logout}  />} />
             <Route path="/profile" element={<Profile user={user} />} />
             <Route path={`${user.role === "student" ? "/my-learnings" : "/my-courses"}`} element={<MyCourses user={user} />} />
             <Route path="/my-courses/create" element={<CreateCourse user={user} />} />

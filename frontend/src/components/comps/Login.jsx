@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
+
 import {
   Form,
   FormControl,
@@ -46,6 +47,12 @@ const Login = ({ setCookie }) => {
       password: '',
     },
   })
+
+
+  const handleGoogle = () => {
+    // window.open("http://localhost:3000/users/auth/google", "_self");
+  }
+
 
   async function onSubmit(values) {
     
@@ -130,7 +137,7 @@ const Login = ({ setCookie }) => {
                   />
                   <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? <> <Circle /> Loging in </> : "Log in"}
                   </Button>
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" onClick={handleGoogle} className="w-full">
                     Login with Google
                   </Button>
                 </div>
