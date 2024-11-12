@@ -30,10 +30,14 @@ const createCourse = async (req, res) => {
 const courses = async (req,res) => {
   try {
     const courses = await Course.find();
-    console.log(courses)
+ 
     if (!courses) {
       return res.status(404).json({status: false, message: "No courses found"});
     }
+    courses.forEach(async(course) => {
+      let instructor = await User.findById(course.instructor);
+      course.instructor = instructor;
+    })
     return res.status(200).json({status: true, message: "Courses fetched successfully", courses: courses});
   } catch (error) {
     res.status(500).json({status: false, message: "Error fetching courses", error: error})

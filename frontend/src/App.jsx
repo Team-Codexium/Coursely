@@ -40,7 +40,6 @@ const App = () => {
     getCourses();
   }, [])
 
-  console.log(courses)
   useEffect(() => {
     // Calling getUser only when we have token
     if (cookies.token || sessionStorage.getItem('token')) {
