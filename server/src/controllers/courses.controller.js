@@ -4,18 +4,6 @@ import Lesson from "../models/lesson.models.js";
 import User from "../models/user.models.js";
 
 
-const courses = async (req, res) => {
-  try {
-    const courses = await Course.find();
-    console.log(courses)
-    if (!courses) {
-      return res.status(404).json({status: false, message: "No courses found"});
-    }
-    return res.status(200).json({status: true, message: "Courses fetched successfully", courses: courses});
-  } catch (error) {
-    res.status(500).json({status: false, message: "Error fetching courses", error: error})
-  }
-}
 
 const createCourse = async (req, res) => {
   try {
@@ -39,19 +27,20 @@ const createCourse = async (req, res) => {
   }
 }
 
-const fetchCourse = async (req,res) => {
-  try{
-    const data = await Course.find();
-    console.log(data);
-    return res.json(data);
-  }
-  catch(error){
-    return res.status(500).json({status: false, message: "Error during fetching course", error: error})
+const courses = async (req,res) => {
+  try {
+    const courses = await Course.find();
+    console.log(courses)
+    if (!courses) {
+      return res.status(404).json({status: false, message: "No courses found"});
+    }
+    return res.status(200).json({status: true, message: "Courses fetched successfully", courses: courses});
+  } catch (error) {
+    res.status(500).json({status: false, message: "Error fetching courses", error: error})
   }
 }
 
 export {
   courses,
   createCourse,
-  fetchCourse
 }

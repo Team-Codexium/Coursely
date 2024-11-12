@@ -29,10 +29,10 @@ const App = () => {
       setIsAuthenticated(false);
     }
   };
-  useEffect( ()=>{
+  useEffect(()=>{
     const getCourses = async () =>{
       const response = await axios.get('http://localhost:3000/courses', {withCredentials:true});
-      
+      console.log(response)
       if (response.data.status) {
         setCourses(response.data.courses)
       }

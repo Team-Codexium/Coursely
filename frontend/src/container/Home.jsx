@@ -11,15 +11,15 @@ const Home = ({courses}) => {
 
  
   const handleNext = () => {
-    if (currentIndex + visibleCards < courses.length) {
-      setCurrentIndex(currentIndex + visibleCards);
-    }
+    // if (currentIndex + visibleCards < courses.length) {
+    //   setCurrentIndex(currentIndex + visibleCards);
+    // }
   };
 
   const handlePrevious = () => {
-    if (currentIndex - visibleCards >= 0) {
-      setCurrentIndex(currentIndex - visibleCards);
-    }
+    // if (currentIndex - visibleCards >= 0) {
+    //   setCurrentIndex(currentIndex - visibleCards);
+    // }
   };
 
   return (
@@ -50,7 +50,7 @@ const Home = ({courses}) => {
           </button>
 
           <div className="flex overflow-hidden flex-wrap">
-            {courses
+            {courses && courses
               .slice(currentIndex, currentIndex + visibleCards)
               .map((course, index) => (
                 <div key={index} className="w-64 mx-2">
