@@ -9,6 +9,7 @@ import { Toaster } from "./components/ui/toaster";
 const App = () => {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const [user, setUser] = useState({});
+  const [courses, setCourses] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const getUser = async (token) => {
@@ -27,7 +28,18 @@ const App = () => {
       setIsAuthenticated(false);
     }
   };
+  useEffect( ()=>{
+    const getCourses = async () =>{
+      const response = await axios.get('http://localhost:3000/courses', {withCredentials:true});
+      
+      if (response.data.status) {
+        setCourses(response.data.courses)
+      }
+    }
+    getCourses();
+  }, [])
 
+  console.log(courses)
   useEffect(() => {
     // Calling getUser only when we have token
     if (cookies.token || sessionStorage.getItem('token')) {
@@ -63,7 +75,7 @@ const App = () => {
     navigate('/');  
   };
 
-// console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID)
+
   return (
     <div>
       <Toaster />
@@ -71,7 +83,7 @@ const App = () => {
       <Routes>
         {!isAuthenticated ? (
           <>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home courses={courses} />} />
             <Route path="/register" element={<Register setIsAuthenticated={setIsAuthenticated} setCookie={setCookie} />} />
             <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} user={user} setCookie={setCookie} />} />
           </>

@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
 import banner from "../assets/banner.png";
+import PropTypes from "prop-types";
 
-const Home = () => {
-  const [courses, setCourses] = useState([]);
+const Home = ({courses}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const visibleCards = 4;
 
-  useEffect(() => {
-    // Fetch data from JSON file
-    fetch("/course.json")
-      .then((response) => response.json())
-      .then((data) => setCourses(data))
-      .catch((error) => console.error("Error fetching courses:", error));
-  }, []);
-
+ 
   const handleNext = () => {
     if (currentIndex + visibleCards < courses.length) {
       setCurrentIndex(currentIndex + visibleCards);
@@ -56,7 +49,7 @@ const Home = () => {
             &lt; Previous
           </button>
 
-          <div className="flex overflow-hidden">
+          <div className="flex overflow-hidden flex-wrap">
             {courses
               .slice(currentIndex, currentIndex + visibleCards)
               .map((course, index) => (
@@ -106,3 +99,7 @@ const Home = () => {
 };
 
 export default Home;
+
+Home.propTypes = {
+  courses: PropTypes.array,
+}
