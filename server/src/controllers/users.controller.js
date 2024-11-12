@@ -18,7 +18,7 @@ const googleAuth = (req, res, next) => {
       httpOnly: true,
       secure: true,
     });
-    res.redirect(`/${token}`);
+    res.redirect(`/dashboard`);
   })(req, res, next);
 };
 
@@ -67,7 +67,7 @@ const login = async (req, res, next) => {
   try {
     // checks if the user is already exists
     const user = await User.findOne({ email }).select("+password");
-    console.log(user)
+    
     // if doesnt
     if (!user) {
       return res
@@ -139,8 +139,7 @@ const uploadMedia = async (req, res) => {
           message: "Error uploading media to Cloudinary",
         });
     }
-    const url = media.url;
-    console.log("url: " + url);
+    const url = media.url;;
     return res.status(200).json({
       success: true,
       message: "Media uploaded",

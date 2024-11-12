@@ -7,8 +7,9 @@ import {upload} from "../middlewares/multer.js";
 
 const router = Router();
 
-router.route("auth/google", passport.authenticate('google', { scope: ['profile', 'email']}));
-router.route('/auth/google/callback').post(googleAuth);
+
+router.route("auth/google").get(passport.authenticate('google', { scope: ['profile', 'email']}));
+router.route('/auth/google/callback').get(googleAuth);
 router.route('/register').post(register);
 router.route('/login').post(login);
 router.route('/getUser').get(jwtAuthentication, getUser);

@@ -9,6 +9,7 @@ import { Toaster } from "./components/ui/toaster";
 const App = () => {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const [user, setUser] = useState({});
+  const [courses, setCourses] = useState([])
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const getUser = async (token) => {
@@ -56,7 +57,17 @@ const App = () => {
     }
   }, [cookies.token]);
 
-
+  useEffect(() => {
+    const getCourses = async () => {
+      const response = await axios.get("http://localhost:3000/courses", {withCredentials: true});
+      // console.log(response.data.courses)
+      if (response.data.success) {
+        setCourses(response.data.courses)
+      }
+    }
+    getCourses();
+    // console.log("courses", courses)
+  }, [])
   const logout = () => {
     removeCookie('token');
     sessionStorage.removeItem('token');
@@ -78,7 +89,7 @@ const App = () => {
           </>
         ) : (
           <>
-            <Route path={`${isAuthenticated ? "/" : "/dashboard"}`} element={<Dashboard user={user} logout={logout}  />} />
+            <Route path={`${isAuthenticated ? "/" : "/dashboard"}`} element={<Dashboard user={user} courses={courses} logout={logout}  />} />
             <Route path="/profile" element={<Profile user={user} />} />
             <Route path={`${user.role === "student" ? "/my-learnings" : "/my-courses"}`} element={<MyCourses user={user} />} />
             <Route path="/my-courses/create" element={<CreateCourse user={user} />} />

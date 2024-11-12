@@ -3,19 +3,26 @@ import banner from "../assets/banner.png";
 import { Button } from "@/components/ui/button";
 import AppWrap from "@/wrapper/AppWrap";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import axios from "axios";
 
 const Home = () => {
   const [courses, setCourses] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const visibleCards = 4;
 
+
   useEffect(() => {
-    // Fetch data from JSON file
-    fetch("/course.json")
-      .then((response) => response.json())
-      .then((data) => setCourses(data))
-      .catch((error) => console.error("Error fetching courses:", error));
-  }, []);
+    const getCourses = async () => {
+      const response = await axios.get("http://localhost:3000/courses", {withCredentials: true});
+      // console.log(response.data.courses)
+      if (response.data.success) {
+        setCourses(response.data.courses)
+      }
+    }
+    getCourses();
+  }, [])
+  console.log(courses)
 
   const handleNext = () => {
     if (currentIndex + visibleCards < courses.length) {
@@ -30,7 +37,7 @@ const Home = () => {
   };
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 max-w-[80rem] flex flex-col justify-center items-start">
+    <div className="px-4 md:px-8 lg:px-16 max-w-[80rem] w-full flex flex-col justify-center items-start">
       <section
         style={{ backgroundImage: `url(${banner})` }}
         className="mt-8 h-[23rem] w-full p-6 bg-center bg-cover bg-gray-200 border-2 border-blue-400 rounded-lg flex flex-col md:flex-row items-center justify-between"
@@ -69,8 +76,8 @@ const Home = () => {
                       <p className="text-gray-500 text-sm">{course.mentor}</p>
                       <div className="flex items-center space-x-2 my-2">
                         <span className="text-yellow-500 text-lg font-bold">
-                          {course.rating}
-                        </span>
+                          {course.rating} 
+                        </span> 
                         <span className="text-gray-500 text-xs">
                           ({course.reviews})
                         </span>
@@ -79,10 +86,10 @@ const Home = () => {
                     </div>
 
                     <div className="flex justify-between p-4 bg-gray-100">
-                      <button className="bg-gray-800 text-white px-2 py-2 rounded">
+                    <Link to={`/login`}><button className="bg-gray-800 text-white px-2 py-2 rounded">
                         ADD TO CART
-                      </button>
-                      <Link to={`/courses/${courses.id}`}><button className="bg-yellow-500 text-black px-2 space-2 py-2 rounded">
+                      </button></Link>
+                      <Link to={`/courses/${course._id}`}><button className="bg-yellow-500 text-black px-2 space-2 py-2 rounded">
                         Start now
                       </button></Link>
                     </div>
@@ -104,5 +111,10 @@ const Home = () => {
     </div>
   );
 };
+
+
+Home.propTypes = {
+  allCourses: PropTypes.arrayOf(PropTypes.object)
+}
 
 export default AppWrap(Home);

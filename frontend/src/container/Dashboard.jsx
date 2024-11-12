@@ -8,13 +8,25 @@ import AppWrap from '@/wrapper/AppWrap'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {hero} from '../assets'
 
-const Dashboard = ({ logout, user }) => {
+const Dashboard = () => {
+  const [courses, setCourses] = useState([]);
   // const [data, setData] = useState([]);
   // console.log(user);
   // const handleSubmit = async () => {
   //   const response = await axios.get('http://localhost:3000/auth/google');
   //   setData(response.data);
   // }
+
+  const getCourses = async () => {
+    const response = await axios.get("http://localhost:3000/courses", {withCredentials: true});
+    // console.log(response.data.courses)
+    if (response.data.success) {
+      setCourses(response.data.courses)
+    }
+  }
+  useEffect(() => {
+    getCourses();
+  }, [courses]);
 
   return (
     <div className=' max-w-[80rem]  flex flex-col items-start justify-center overflow-hidden '>
@@ -39,6 +51,40 @@ const Dashboard = ({ logout, user }) => {
         <Button className="mt-7 md:text-lg md:h-12">Explore</Button>
       </div>
 
+      <h1 className='font-season text-3xl font-bold my-4 px-2 uppercase'>Courses For You</h1>
+
+      <div className='flex space-y-4 flex-wrap gap-5 w-full justify-center items-center'>
+        {courses.map((course, index) => (
+          <div key={index} className="w-64 mx-2">
+          <div className="border rounded-lg overflow-hidden shadow-lg">
+            <div className="bg-gray-300 h-48"></div>
+
+            <div className="p-4">
+              <h4 className="text-lg font-semibold">{course.title}</h4>
+              <p className="text-gray-500 text-sm">{course.mentor}</p>
+              <div className="flex items-center space-x-2 my-2">
+                <span className="text-yellow-500 text-lg font-bold">
+                  {course.rating}
+                </span>
+                <span className="text-gray-500 text-xs">
+                  ({course.reviews})
+                </span>
+              </div>
+              <p className="text-lg font-bold">{course.price}</p>
+            </div>
+
+            <div className="flex justify-between p-4 bg-gray-100">
+            <Button className="bg-gray-800 text-white px-2 py-2 rounded">
+                ADD TO CART
+              </Button>
+              <Link to={`/courses/${course._id}`}><Button className="bg-yellow-500 text-darkBrown hover:text-lightBrown px-2 space-2 py-2 rounded">
+                Start now
+              </Button></Link>
+            </div>
+          </div>
+        </div>
+        ))}
+      </div>
 
     </div>
   )
@@ -48,5 +94,6 @@ export default AppWrap(Dashboard)
 
 Dashboard.propTypes = {
   logout: PropTypes.func,
-  user: PropTypes.object
+  user: PropTypes.object,
+  courses: PropTypes.array
 }
