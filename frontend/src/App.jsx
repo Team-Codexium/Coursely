@@ -9,7 +9,7 @@ import { Toaster } from "./components/ui/toaster";
 const App = () => {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const [user, setUser] = useState({});
-  const [courses, setCourses] = useState([])
+  const [courses, setCourses] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const getUser = async (token) => {
@@ -29,7 +29,16 @@ const App = () => {
       setIsAuthenticated(false);
     }
   };
-
+  useEffect(()=>{
+    const getCourses = async () =>{
+      const response = await axios.get('http://localhost:3000/courses', {withCredentials:true});
+      console.log(response)
+      if (response.data.status) {
+        setCourses(response.data.courses)
+      }
+    }
+    getCourses();
+  }, [])
 
   useEffect(() => {
     // Calling getUser only when we have token
@@ -76,6 +85,7 @@ const App = () => {
     navigate('/');  
   };
 
+
   return (
     <div>
       <Toaster />
@@ -83,7 +93,7 @@ const App = () => {
       <Routes>
         {!isAuthenticated ? (
           <>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home courses={courses} />} />
             <Route path="/register" element={<Register setIsAuthenticated={setIsAuthenticated} setCookie={setCookie} />} />
             <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} user={user} setCookie={setCookie} />} />
           </>

@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import banner from "../assets/banner.png";
+import PropTypes from "prop-types";
 import { Button } from "@/components/ui/button";
 import AppWrap from "@/wrapper/AppWrap";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
-import axios from "axios";
+import axios from 'axios';
 
 const Home = () => {
-  const [courses, setCourses] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const visibleCards = 4;
-
-
+  const [courses, setCourses] = useState([]);
+  
   useEffect(() => {
     const getCourses = async () => {
       const response = await axios.get("http://localhost:3000/courses", {withCredentials: true});
@@ -22,8 +21,7 @@ const Home = () => {
     }
     getCourses();
   }, [])
-  console.log(courses)
-
+ 
   const handleNext = () => {
     if (currentIndex + visibleCards < courses.length) {
       setCurrentIndex(currentIndex + visibleCards);
@@ -63,8 +61,8 @@ const Home = () => {
             &lt; Previous
           </button>
 
-          <div className="flex overflow-hidden">
-            {courses
+          <div className="flex overflow-hidden flex-wrap">
+            {courses && courses
               .slice(currentIndex, currentIndex + visibleCards)
               .map((course, index) => (
                 <div key={index} className="w-64 mx-2">
@@ -112,9 +110,8 @@ const Home = () => {
   );
 };
 
+export default AppWrap(Home);
 
 Home.propTypes = {
-  allCourses: PropTypes.arrayOf(PropTypes.object)
+  courses: PropTypes.array,
 }
-
-export default AppWrap(Home);

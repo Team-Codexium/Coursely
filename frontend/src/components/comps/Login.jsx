@@ -48,9 +48,8 @@ const Login = ({ setCookie }) => {
     },
   })
 
-  // const handleGoogle = () => {
-  //   window.open("http://localhost:3000/users/auth/google");
-  // }
+
+
 
 
   async function onSubmit(values) {

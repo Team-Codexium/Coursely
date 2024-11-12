@@ -15,7 +15,7 @@ import { Button } from '../ui/button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Circle } from 'lucide-react';
+import {Circle} from 'lucide-react';
 
 const updateProfileSchema = z.object({
   name: z.string().min(2, {
@@ -32,7 +32,7 @@ const updateProfileSchema = z.object({
 const EditProfile = ({ cookies, user }) => {
   const [file, setFile] = useState(null);
   const [pfpUrl, setPfpUrl] = useState("");
-  
+
 
   const handleUpload = async () => {
     console.log(`Uploading`);
@@ -44,9 +44,10 @@ const EditProfile = ({ cookies, user }) => {
     formData.append('media', file);
     try {
       const response = await axios.post("http://localhost:3000/users/upload-media", formData, { headers: { "Content-Type": "multipart/form-data", }, withCredentials: true });
-      console.log(response)
+    
       const url = response.data.url;
       setPfpUrl(url)
+      
       
     } catch (error) {
       console.log("Error: ", error)
@@ -70,10 +71,10 @@ const EditProfile = ({ cookies, user }) => {
   const onSubmit = async (values) => {
     try {
       await handleUpload();
-      console.log(pfpUrl)
+
       const formData = new FormData();
       formData.append("name", values.name);
-      // formData.append("role", role);
+   
       formData.append("interests", values.interests);
       formData.append("experties", values.experties);
       formData.append("bio", values.bio);

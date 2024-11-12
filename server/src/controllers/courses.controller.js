@@ -3,23 +3,6 @@ import Course from "../models/course.models.js"
 import Lesson from "../models/lesson.models.js";
 import User from "../models/user.models.js";
 
-
-const courses = async (req, res) => {
-  try {
-    const courses = await Course.find();
-    if (!courses) {
-      return res.status(404).json({success: false, message: "No courses found"});
-    }
-    courses.forEach(async(course) => {
-      let instructor = await User.findById(course.instructor);
-      course.instructor = instructor;
-    })
-    return res.status(200).json({success: true, message: "Courses fetched successfully", courses});
-  } catch (error) {
-    res.status(500).json({success: false, message: "Error fetching courses", error: error})
-  }
-}
-
 const createCourse = async (req, res) => {
   try {
     const { title, description, price, language, lessons, userId } = req.body;
@@ -42,7 +25,24 @@ const createCourse = async (req, res) => {
   }
 }
 
+const courses = async (req,res) => {
+  try {
+    const courses = await Course.find();
+ 
+    if (!courses) {
+      return res.status(404).json({success: false, message: "No courses found"});
+    }
+    courses.forEach(async(course) => {
+      let instructor = await User.findById(course.instructor);
+      course.instructor = instructor;
+    })
+    return res.status(200).json({success: true, message: "Courses fetched successfully", courses: courses});
+  } catch (error) {
+    res.status(500).json({success: false, message: "Error fetching courses", error: error})
+  }
+}
+
 export {
   courses,
-  createCourse
+  createCourse,
 }
