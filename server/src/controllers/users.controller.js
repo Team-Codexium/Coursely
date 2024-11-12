@@ -3,6 +3,7 @@ import User from "../models/user.models.js";
 import { uploadOnCloudinary } from "../config/cloudenry.js";
 import bcrypt from "bcrypt";
 import multer from "multer";
+import mongoose from "mongoose";
 
 const googleAuth = (req, res, next) => {
   passport.authenticate("google", { session: false }, (error, data) => {
@@ -66,7 +67,7 @@ const login = async (req, res, next) => {
   try {
     // checks if the user is already exists
     const user = await User.findOne({ email }).select("+password");
-
+    console.log(user)
     // if doesnt
     if (!user) {
       return res
@@ -83,12 +84,11 @@ const login = async (req, res, next) => {
 
     //Generating JWT token
     const token = await user.generateAccessToken(user._id);
-
     //Setting the token in the response cookie sending response
     return res
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: "None",
+        sameSite: "Strict",
         secure: true,
       })
       .status(200)
@@ -105,6 +105,7 @@ const login = async (req, res, next) => {
 const getUser = async (req, res, next) => {
   const userId = req.user._id;
   try {
+    
     const user = await User.findById(userId);
     if (!user) {
       return res
@@ -119,42 +120,67 @@ const getUser = async (req, res, next) => {
   }
 };
 
-const updatePfp = async (req, res) => {
+const uploadMedia = async (req, res) => {
   try {
-    const pfpPath = req.file?.path;
+    const mediaPath = req.file?.path;
 
-    if (!pfpPath) {
+    if (!mediaPath) {
       return res
         .status(400)
-        .json({ success: false, message: "No profile picture provided" });
+        .json({ success: false, message: "No mediae provided" });
     }
 
-    const pfp = await uploadOnCloudinary(pfpPath);
-    if (!pfp.url) {
+    const media = await uploadOnCloudinary(mediaPath);
+    if (!media.url) {
       return res
         .status(500)
         .json({
           success: false,
-          message: "Error uploading profile picture to Cloudinary",
+          message: "Error uploading media to Cloudinary",
         });
     }
-    const user = await User.findByIdAndUpdate(
-      req.body.id,
-      {
-        pfp: pfp.url,
-      },
-      { new: true }
-    ).select("-password");
-
-    console.log(user);
+    const url = media.url;
+    console.log("url: " + url);
     return res.status(200).json({
-      suucess: true,
-      message: "PFP Updated",
-      user,
+      success: true,
+      message: "Media uploaded",
+      url,
     });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
 
-export { googleAuth, register, login, getUser, updatePfp };
+const updateUser = async (req, res, next) => {
+  const userId = req.user._id;
+  const { name, experties, interests, bio, pfp } = req.body;
+  
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {$set: {
+        name,
+        experties,
+        interests,
+        bio,
+        pfp,
+      }},
+      { new: true }
+    );
+  
+    if (!user) {
+      return res
+       .status(404)
+       
+       .json({ success: false, message: "User not found" });
+    }
+    return res.status(200).send({ success: true, message: "User details updated successfully"});
+
+  } catch (error) {
+    return res
+     .status(500)
+     .json({ success: false, message: "Error updating user", error: error });
+  }
+}
+
+export { googleAuth, register, login, getUser, uploadMedia, updateUser };

@@ -1,4 +1,5 @@
 import Cards from "./Cards";
+import CourseDetails from "./CourseDetails";
 import CreateCourse from "./CreateCourse";
 import EditProfile from "./EditProfile";
 import Login from "./Login";
@@ -16,5 +17,6 @@ export {
   MyCourses,
   Progress,
   CreateCourse,
-  EditProfile
+  EditProfile,
+  CourseDetails,
 }

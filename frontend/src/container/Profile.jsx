@@ -4,14 +4,13 @@ import { Link } from 'react-router-dom';
 
 
 const Profile = ({ user }) => {
-  console.log(user);
   return (
-    <div>
-      <h1>{user.name}</h1>
-      <h1>{user.email}</h1>
-      <h1>{user.role}</h1>
-      <h1>{user.bio}</h1>
-      <img src={user.pfp} alt="" />
+    <div className='flex flex-col space-y-5 justify-center items-center'>
+      <img src={user.pfp} alt="profile picture" className='h-full w-60  rounded-full ' />
+      <h1>Name: <span className='ml-3'>{user.name}</span></h1>
+      <h1>Email: <span className='ml-3'>{user.email}</span></h1>
+      <h1>Interests: <span className='ml-3'>{user.interests}</span></h1>
+      <h1>Bio: <span className='ml-3'>{user.bio}</span></h1>
 
       <Link to="/profile/edit-profile"><Button>Edit Profile</Button></Link>
     </div>

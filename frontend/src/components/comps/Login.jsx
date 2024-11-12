@@ -55,7 +55,7 @@ const Login = ({ setCookie }) => {
 
 
   async function onSubmit(values) {
-    
+
     try {
       const response = await axios.post(
         "http://localhost:3000/users/login",
@@ -65,9 +65,7 @@ const Login = ({ setCookie }) => {
       // console.log("login response: ", response)
       if (response.data.success) {
 
-        setCookie("token", response.data.token,{ 
-          sameSite: "None",
-        });
+        setCookie("token", response.data.token, { sameSite: "None", secure: true });
         setErrorMessage(response.data.message);
         navigate("/dashboard");
 
