@@ -7,6 +7,7 @@ import User from "../models/user.models.js";
 const courses = async (req, res) => {
   try {
     const courses = await Course.find();
+    console.log(courses)
     if (!courses) {
       return res.status(404).json({status: false, message: "No courses found"});
     }
@@ -38,7 +39,19 @@ const createCourse = async (req, res) => {
   }
 }
 
+const fetchCourse = async (req,res) => {
+  try{
+    const data = await Course.find();
+    console.log(data);
+    return res.json(data);
+  }
+  catch(error){
+    return res.status(500).json({status: false, message: "Error during fetching course", error: error})
+  }
+}
+
 export {
   courses,
-  createCourse
+  createCourse,
+  fetchCourse
 }
