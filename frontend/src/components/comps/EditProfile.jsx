@@ -15,8 +15,7 @@ import { Button } from '../ui/button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import {Circle} from 'lucide-react';
-import AppWrap from '@/wrapper/AppWrap';
+import { Circle } from 'lucide-react';
 
 const updateProfileSchema = z.object({
   name: z.string().min(2, {
@@ -30,10 +29,10 @@ const updateProfileSchema = z.object({
 })
 
 
-const EditProfile = ({ user }) => {
+const EditProfile = ({ cookies, user }) => {
   const [file, setFile] = useState(null);
   const [pfpUrl, setPfpUrl] = useState("");
-  console.log(user)
+  
 
   const handleUpload = async () => {
     console.log(`Uploading`);
@@ -45,12 +44,9 @@ const EditProfile = ({ user }) => {
     formData.append('media', file);
     try {
       const response = await axios.post("http://localhost:3000/users/upload-media", formData, { headers: { "Content-Type": "multipart/form-data", }, withCredentials: true });
-    
+      console.log(response)
       const url = response.data.url;
-      console.log(url)
       setPfpUrl(url)
-      console.log(pfpUrl)
-      
     } catch (error) {
       console.log("Error: ", error)
     }
@@ -73,10 +69,10 @@ const EditProfile = ({ user }) => {
   const onSubmit = async (values) => {
     try {
       await handleUpload();
-      console.log(pfpUrl)
+      
       const formData = new FormData();
       formData.append("name", values.name);
-   
+      // formData.append("role", role);
       formData.append("interests", values.interests);
       formData.append("experties", values.experties);
       formData.append("bio", values.bio);
@@ -94,7 +90,7 @@ const EditProfile = ({ user }) => {
 
 
   return (
-    <div className='flex flex-col justify-center items-center space-y-5 w-full max-w-[80rem]'>
+    <div className='flex flex-col justify-center items-center space-y-5'>
       <img src={user.pfp} alt="profile picture" className='h-full w-36 rounded-full bg-over' />
       <form action='http://localhost:3000/users/upload-media' method="POST" encType='multipart/form-data' onSubmit={(e) => handleUpload(e)} className='flex flex-col s'>
         <label htmlFor="pfp">Profile Picture</label>
@@ -163,7 +159,7 @@ const EditProfile = ({ user }) => {
   )
 }
 
-export default AppWrap(EditProfile)
+export default EditProfile
 
 EditProfile.propTypes = {
   user: PropTypes.object,

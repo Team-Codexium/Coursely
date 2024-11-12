@@ -17,7 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip"
 
 const Navbar = ({ logout, isAuthenticated, user }) => {
-  // console.log(user);
+  console.log(user);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {

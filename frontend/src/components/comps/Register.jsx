@@ -114,7 +114,7 @@ const Register = ({ setCookie, setIsAuthenticated }) => {
       formData.append("bio", values.bio || "");
       
       //Sending formData to backend
-      const response = await axios.post("http://localhost:3000/users/register", formData, { withCredentials: true });
+      const response = await axios.post("http://localhost:3000/users/register", values, { withCredentials: true });
 
       const token = response.data.token;
       if (token) {

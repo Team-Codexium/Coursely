@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/form"
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import AppWrap from "@/wrapper/AppWrap";
 
 
 const courseSchema = z.object({
@@ -80,7 +79,7 @@ const CreateCourse = ({user}) => {
   };
 
   return (
-    <Card className="mx-auto max-w-3xl p-6 m-6 w-full max-w-[80rem]">
+    <Card className="mx-auto max-w-3xl p-6 m-6 w-full">
       <CardHeader>
         <CardTitle className="text-2xl">Create Course</CardTitle>
       </CardHeader>
@@ -168,7 +167,7 @@ const CreateCourse = ({user}) => {
                   <Button type="button" variant="destructive" onClick={() => remove(index)}>Remove Lesson</Button>
                 </div>
               ))}
-              <Button className="mt-4" type="button" onClick={() => append({ title: "", content: "", duration: 0 })}>Add Lesson</Button>
+              <Button className="mt-3" type="button" onClick={() => append({ title: "", content: "", duration: 0 })}>Add Lesson</Button>
             </div>
 
             <Button type="submit">Submit</Button>
@@ -182,7 +181,7 @@ const CreateCourse = ({user}) => {
   );
 };
 
-export default AppWrap(CreateCourse);
+export default CreateCourse;
 
 CreateCourse.propTypes = {
   user: PropTypes.object,
