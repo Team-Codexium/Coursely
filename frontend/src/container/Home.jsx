@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import banner from "../assets/banner.png";
+import { Button } from "@/components/ui/button";
+import AppWrap from "@/wrapper/AppWrap";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [courses, setCourses] = useState([]);
@@ -27,20 +30,17 @@ const Home = () => {
   };
 
   return (
-    <div className="px-4 md:px-8 lg:px-16">
+    <div className="px-4 md:px-8 lg:px-16 max-w-[80rem] flex flex-col justify-center items-start">
       <section
         style={{ backgroundImage: `url(${banner})` }}
-        className="mt-8 h-[23rem] p-6 bg-center bg-cover bg-gray-200 border-2 border-blue-400 rounded-lg flex flex-col md:flex-row items-center justify-between"
+        className="mt-8 h-[23rem] w-full p-6 bg-center bg-cover bg-gray-200 border-2 border-blue-400 rounded-lg flex flex-col md:flex-row items-center justify-between"
       >
         <div className="flex flex-col text-left space-y-2">
           <h2 className="text-4xl text-lightBrown w-60 font-bold">
             Become the best version of yourself
           </h2>
-          <p className="text-2xl">Explore now</p>
+          <Button variant="outline" className="text-xl">Explore now</Button>
         </div>
-        {/* <div className="w-full md:w-1/2 h-48 bg-black text-white flex items-center justify-center mt-4 md:mt-0 "  > */}
-        {/* <img  src={banner} alt="hjhjhhgfufhfhvugfuyhfguhgf" /> */}
-        {/* </div> */}
       </section>
 
       <section className="mt-12">
@@ -82,9 +82,9 @@ const Home = () => {
                       <button className="bg-gray-800 text-white px-2 py-2 rounded">
                         ADD TO CART
                       </button>
-                      <button className="bg-yellow-500 text-black px-2 space-2 py-2 rounded">
+                      <Link to={`/courses/${courses.id}`}><button className="bg-yellow-500 text-black px-2 space-2 py-2 rounded">
                         Start now
-                      </button>
+                      </button></Link>
                     </div>
                   </div>
                 </div>
@@ -105,4 +105,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default AppWrap(Home);

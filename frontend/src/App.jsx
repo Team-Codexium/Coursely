@@ -1,4 +1,4 @@
-import { CreateCourse, EditProfile, Login, MyCourses, Navbar, Register } from "./components/comps";
+import { CourseDetails, CreateCourse, EditProfile, Login, MyCourses, Navbar, Register } from "./components/comps";
 import { Dashboard, Home, Profile } from "./container";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -15,18 +15,20 @@ const App = () => {
     try {
       // Calling backend to get user information
       const response = await axios.get("http://localhost:3000/users/getUser", {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }, withCredentials: true,
       });
       
       // Saving data of user in as var
       setUser(response.data.user);
       setIsAuthenticated(true);
     } catch (error) {
+      // Removing token from local storage if user is not authenticated
       sessionStorage.removeItem("token");
       console.log("Error fetching user:", error);
       setIsAuthenticated(false);
     }
   };
+
 
   useEffect(() => {
     // Calling getUser only when we have token
@@ -37,7 +39,7 @@ const App = () => {
     } else {
       setIsAuthenticated(false);
     }
-  }, [cookies.token]);
+  }, [cookies.token, user]);
 
   useEffect(() => {
     //Navingation accordingly
@@ -63,7 +65,6 @@ const App = () => {
     navigate('/');  
   };
 
-// console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID)
   return (
     <div>
       <Toaster />
@@ -81,7 +82,8 @@ const App = () => {
             <Route path="/profile" element={<Profile user={user} />} />
             <Route path={`${user.role === "student" ? "/my-learnings" : "/my-courses"}`} element={<MyCourses user={user} />} />
             <Route path="/my-courses/create" element={<CreateCourse user={user} />} />
-            <Route path="/profile/edit-profile" element={<EditProfile user={user} setUser={setUser}/>} />
+            <Route path="/profile/edit-profile" element={<EditProfile user={user} cookies={cookies} setUser={setUser}/>} />
+            <Route path="/courses/:id" element={<CourseDetails user={user} cookies={cookies} setUser={setUser}/>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         )}

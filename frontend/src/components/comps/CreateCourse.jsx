@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 
 const courseSchema = z.object({
@@ -38,6 +39,7 @@ const courseSchema = z.object({
 
 const CreateCourse = ({user}) => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(courseSchema),
     defaultValues: {
@@ -50,7 +52,6 @@ const CreateCourse = ({user}) => {
   });
 
   const { control } = form;
-  console.log(form)
   const { fields, append, remove } = useFieldArray({ control, name: "lessons" });
 
   const onSubmit = async (data) => {
@@ -69,6 +70,7 @@ const CreateCourse = ({user}) => {
       const response = await axios.post("http://localhost:3000/courses/create", parsedData, { withCredentials: true });
       if (response.data.success) {
         toast({ title: "Course created successfully!" });
+        navigate("/my-courses");
       }
     } catch (error) {
       console.error("Error creating course:", error);
