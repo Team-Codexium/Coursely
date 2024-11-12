@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {Circle} from 'lucide-react';
+import AppWrap from '@/wrapper/AppWrap';
 
 const updateProfileSchema = z.object({
   name: z.string().min(2, {
@@ -29,10 +30,10 @@ const updateProfileSchema = z.object({
 })
 
 
-const EditProfile = ({ cookies, user }) => {
+const EditProfile = ({ user }) => {
   const [file, setFile] = useState(null);
   const [pfpUrl, setPfpUrl] = useState("");
-
+  console.log(user)
 
   const handleUpload = async () => {
     console.log(`Uploading`);
@@ -46,8 +47,9 @@ const EditProfile = ({ cookies, user }) => {
       const response = await axios.post("http://localhost:3000/users/upload-media", formData, { headers: { "Content-Type": "multipart/form-data", }, withCredentials: true });
     
       const url = response.data.url;
+      console.log(url)
       setPfpUrl(url)
-      
+      console.log(pfpUrl)
       
     } catch (error) {
       console.log("Error: ", error)
@@ -71,7 +73,7 @@ const EditProfile = ({ cookies, user }) => {
   const onSubmit = async (values) => {
     try {
       await handleUpload();
-
+      console.log(pfpUrl)
       const formData = new FormData();
       formData.append("name", values.name);
    
@@ -92,7 +94,7 @@ const EditProfile = ({ cookies, user }) => {
 
 
   return (
-    <div className='flex flex-col justify-center items-center space-y-5'>
+    <div className='flex flex-col justify-center items-center space-y-5 w-full max-w-[80rem]'>
       <img src={user.pfp} alt="profile picture" className='h-full w-36 rounded-full bg-over' />
       <form action='http://localhost:3000/users/upload-media' method="POST" encType='multipart/form-data' onSubmit={(e) => handleUpload(e)} className='flex flex-col s'>
         <label htmlFor="pfp">Profile Picture</label>
@@ -161,7 +163,7 @@ const EditProfile = ({ cookies, user }) => {
   )
 }
 
-export default EditProfile
+export default AppWrap(EditProfile)
 
 EditProfile.propTypes = {
   user: PropTypes.object,

@@ -18,10 +18,10 @@ const createCourse = async (req, res) => {
       instructor,
     });
     const user = await User.findByIdAndUpdate(userId,{ $push: { courseCreated: newCourse._id}}, {new: true})
-    return res.status(201).json({status: true, message: "Course created successfully", course: newCourse});
+    return res.status(201).json({success: true, message: "Course created successfully", course: newCourse});
 
   } catch (error) { 
-    return res.status(500).json({status: false, message: "Error during creating course", error: error})
+    return res.status(500).json({success: false, message: "Error during creating course", error: error})
   }
 }
 

@@ -14,20 +14,20 @@ import {
 } from "@/components/ui/card";
 import { hero } from "../assets";
 
-  const Dashboard = () => {
-    const [courses, setCourses] = useState([]);
-    const getCourses = async () => {
-      const response = await axios.get("http://localhost:3000/courses", {
-        withCredentials: true,
-      });
-      // console.log(response.data.courses)
-      if (response.data.success) {
-        setCourses(response.data.courses);
-      }
-    };
-    useEffect(() => {
-      getCourses();
-    }, [courses]);
+const Dashboard = () => {
+  const [courses, setCourses] = useState([]);
+  const getCourses = async () => {
+    const response = await axios.get("http://localhost:3000/courses", {
+      withCredentials: true,
+    });
+    // console.log(response.data.courses)
+    if (response.data.success) {
+      setCourses(response.data.courses);
+    }
+  };
+  useEffect(() => {
+    getCourses();
+  }, [courses]);
 
     return (
       <div className=" max-w-[80rem]  flex flex-col items-start justify-center overflow-hidden ">

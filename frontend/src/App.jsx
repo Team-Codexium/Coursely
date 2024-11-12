@@ -85,7 +85,6 @@ const App = () => {
     navigate('/');  
   };
 
-
   return (
     <div>
       <Toaster />

@@ -15,13 +15,14 @@ const Home = () => {
     const getCourses = async () => {
       const response = await axios.get("http://localhost:3000/courses", {withCredentials: true});
       // console.log(response.data.courses)
+      console.log(response)
       if (response.data.success) {
         setCourses(response.data.courses)
       }
     }
     getCourses();
   }, [])
- 
+ console.log(courses)
   const handleNext = () => {
     if (currentIndex + visibleCards < courses.length) {
       setCurrentIndex(currentIndex + visibleCards);
@@ -48,7 +49,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="mt-12">
+      <section className="mt-12 w-full">
         <h3 className="text-3xl font-bold mb-8">Browse Courses</h3>
 
         <div className="flex items-center">
@@ -61,7 +62,7 @@ const Home = () => {
             &lt; Previous
           </button>
 
-          <div className="flex overflow-hidden flex-wrap">
+          <div className="flex space-y-4  w-full justify-center items-center">
             {courses && courses
               .slice(currentIndex, currentIndex + visibleCards)
               .map((course, index) => (
