@@ -7,11 +7,13 @@ import PropTypes from 'prop-types';
 import AppWrap from '@/wrapper/AppWrap'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {hero} from '../assets'
+import { useUserContext } from '@/context/UserContext';
 
 const Dashboard = () => {
   const [courses, setCourses] = useState([]);
+  const {user} = useUserContext();
   // const [data, setData] = useState([]);
-  // console.log(user);
+  console.log(user);
   // const handleSubmit = async () => {
   //   const response = await axios.get('http://localhost:3000/auth/google');
   //   setData(response.data);

@@ -1,8 +1,11 @@
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
+import { useUserContext } from '@/context/UserContext';
 
-const MyCourses = ({ user }) => {
+const MyCourses = () => {
+
+  const { user } = useUserContext();
+
   const student = user.role === 'student';
   // const courses = student ? user.enrolledCourses: user.courseCreated
   return (
@@ -28,7 +31,3 @@ const MyCourses = ({ user }) => {
 }
 
 export default MyCourses
-
-MyCourses.propTypes = {
-  user: PropTypes.object
-};

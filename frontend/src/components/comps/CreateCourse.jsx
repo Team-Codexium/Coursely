@@ -15,8 +15,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "@/context/UserContext";
 
 
 const courseSchema = z.object({
@@ -37,7 +37,10 @@ const courseSchema = z.object({
 });
 
 
-const CreateCourse = ({user}) => {
+const CreateCourse = () => {
+
+  const { user } = useUserContext();
+
   const { toast } = useToast();
   const navigate = useNavigate();
   const form = useForm({
@@ -182,7 +185,3 @@ const CreateCourse = ({user}) => {
 };
 
 export default CreateCourse;
-
-CreateCourse.propTypes = {
-  user: PropTypes.object,
-};

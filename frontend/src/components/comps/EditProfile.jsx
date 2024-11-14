@@ -10,12 +10,12 @@ import {
 import { Input } from "@/components/ui/input"
 
 import axios from 'axios';
-import PropTypes from 'prop-types';
 import { Button } from '../ui/button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Circle } from 'lucide-react';
+import { useUserContext } from '@/context/UserContext';
 
 const updateProfileSchema = z.object({
   name: z.string().min(2, {
@@ -29,7 +29,10 @@ const updateProfileSchema = z.object({
 })
 
 
-const EditProfile = ({ cookies, user }) => {
+const EditProfile = () => {
+
+  const { cookies, user } = useUserContext();
+
   const [file, setFile] = useState(null);
   const [pfpUrl, setPfpUrl] = useState("");
   
@@ -160,9 +163,3 @@ const EditProfile = ({ cookies, user }) => {
 }
 
 export default EditProfile
-
-EditProfile.propTypes = {
-  user: PropTypes.object,
-  setUser: PropTypes.func,
-  cookies: PropTypes.object
-}

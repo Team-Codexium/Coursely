@@ -23,10 +23,10 @@ import {
 import { Input } from '@/components/ui/input'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import PropTypes from 'prop-types'
 import { Circle } from 'lucide-react'
 import { useState } from 'react'
 import { useToast } from "@/hooks/use-toast"
+import { useUserContext } from '@/context/UserContext'
 
 
 // Improved schema with additional validation rules
@@ -36,10 +36,13 @@ const formSchema = z.object({
     .string()
 })
 
-const Login = ({ setCookie }) => {
+const Login = () => {
   const toast = useToast()
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
+
+  const {setCookie} = useUserContext();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -153,8 +156,3 @@ const Login = ({ setCookie }) => {
 }
 
 export default Login
-
-Login.propTypes = {
-  setCookie: PropTypes.func,
-  user: PropTypes.object,
-};

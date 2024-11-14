@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { AlignJustify, BookOpenText, CircleUser, LogOut, Search, ShoppingCart, User } from 'lucide-react'
-import PropTypes from "prop-types"
 import { useState } from "react"
 import { Link } from 'react-router-dom'
 
@@ -15,9 +14,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip"
+import { useUserContext } from "@/context/UserContext"
 
-const Navbar = ({ logout, isAuthenticated, user }) => {
-  console.log(user);
+const Navbar = () => {
+  const { user, logout, isAuthenticated } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -115,9 +115,3 @@ const Navbar = ({ logout, isAuthenticated, user }) => {
 }
 
 export default Navbar
-
-Navbar.propTypes = {
-  logout: PropTypes.func,
-  isAuthenticated: PropTypes.bool,
-  user: PropTypes.object
-};

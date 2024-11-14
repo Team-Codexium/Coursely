@@ -33,8 +33,8 @@ import {
 import { Link, useNavigate } from "react-router-dom"
 import {  useState } from "react"
 import { hr } from "@/assets"
-import { Circle, Trash } from "lucide-react"
-import PropTypes from "prop-types"
+import { Circle } from "lucide-react"
+import { useUserContext } from "@/context/UserContext"
 
 const registerSchema = z.object({
   role: z.string().min(1, { message: "Role selection is required." }),
@@ -52,11 +52,13 @@ const registerSchema = z.object({
 })
 
 
-const Register = ({ setCookie, setIsAuthenticated }) => {
+const Register = () => {
   const navigate = useNavigate();
   // const [preview, setPreview] = useState(null)
   const [role, setRole] = useState("");
   const [step, setStep] = useState(1);
+
+  const { setCookie, setIsAuthenticated } = useUserContext();
 
   const handleNext = (e) => {
     e.preventDefault()
@@ -355,9 +357,3 @@ const Register = ({ setCookie, setIsAuthenticated }) => {
 };
 
 export default Register;
-
-
-Register.propTypes = {
-  setCookie: PropTypes.func,
-  setIsAuthenticated: PropTypes.func
-}

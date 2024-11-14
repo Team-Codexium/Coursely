@@ -1,9 +1,12 @@
 import { Button } from '@/components/ui/button';
-import PropTypes from 'prop-types';
+import { useUserContext } from '@/context/UserContext';
 import { Link } from 'react-router-dom';
 
 
-const Profile = ({ user }) => {
+const Profile = () => {
+
+  const { user } = useUserContext();
+
   return (
     <div className='flex flex-col space-y-5 justify-center items-center'>
       <img src={user.pfp} alt="profile picture" className='h-full w-60  rounded-full ' />
@@ -18,7 +21,3 @@ const Profile = ({ user }) => {
 }
 
 export default Profile;
-
-Profile.propTypes = {
-  user: PropTypes.object, 
-};
